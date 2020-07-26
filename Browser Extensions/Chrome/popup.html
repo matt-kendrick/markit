@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<title>MarkIt Extention</title>
+		<script src="script.js"></script>
+		<style>
+			body{
+				background-color:#35363a;
+				color:white
+			}
+			input{
+				background-color:#202124;
+				color:white;
+			}
+			#codeForm{
+				width:600px;
+				display:none;
+			}
+			.warning{
+				color:red;
+			}
+		</style>
+	</head>
+	<body>
+		<h4>MarkIt</h4>
+		<div id='codeForm'>
+			<strong><span class='warning'>Error:</span> User Code Not Found.</strong>
+			<p>
+				User Code: <input id='txtCode'>
+				<button id='btnSetCode'>Set Code</button>
+			</p>
+		</div>
+		<hr>
+		Url: <span id='spUrl'></span>
+		<!--<div>Icons made by <a href="https://icon54.com/" title="Pixel perfect">Pixel perfect</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>-->
+	</body>
+</html>

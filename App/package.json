@@ -1,0 +1,15 @@
+{
+  "name": "markitapi",
+  "version": "1.0.0",
+  "description": "API for MarkIt Bookmarking Site",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon servier.js"
+  },
+  "author": "Matt Kendrick",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.25"
+  }
+}
