@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 
 //setup database connection
 
-let db ='mongodb+srv://admin:<PASSWORD>@cluster0.uqnfe.mongodb.net/markit?retryWrites=true&w=majority';
-db = db.replace('<PASSWORD>','n13tO3Ms6dZ60uud');
+let db = 'Monogo DB String Here';
+db = db.replace('<PASSWORD>','Your Password');
 
 mongoose
   .connect(db, {useNewUrlParser: true,useCreateIndex: true, useFindAndModify: false, useUnifiedTopology: true})
