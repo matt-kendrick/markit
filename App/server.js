@@ -1,10 +1,10 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 
 //setup database connection
-
-let db = 'Monogo DB String Here';
-db = db.replace('<PASSWORD>','Your Password');
+let db = process.env.DB_CONNECTIONSTRING;
+db = db.replace('<PASSWORD>',process.env.DB_PASSWORD);
 
 mongoose
   .connect(db, {useNewUrlParser: true,useCreateIndex: true, useFindAndModify: false, useUnifiedTopology: true})
