@@ -23,6 +23,10 @@ const bookmarkSchema = new mongoose.Schema(
     'category':{
         type: String,
         default: 'Uncategorized'
+    },
+    'createdAt':{
+        type: Date,
+        default: Date.now()
     }
 });
 

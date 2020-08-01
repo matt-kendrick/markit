@@ -89,3 +89,34 @@ exports.delete = async (req, res) => {
         });
     }
 }
+
+exports.getUserCategories = async (req, res) => {
+    
+    try{
+        const bookmarks = await bookmarkModel.aggregate(
+            [
+                {
+                    $match: {userCode: req.params.userCode}
+                },
+                {
+                    $group: {
+                        _id: "$category",
+                        lastCreatedAt: {$max: "$createdAt"},
+                        count: {$sum: 1}
+                    }
+                }
+            ]
+        );
+
+        res.status(200).json({
+            status: 'success',
+            bookmarks
+        });
+    }
+    catch(err){
+        res.status(400).json({
+            status: 'fail',
+            error: err
+        });
+    }
+}

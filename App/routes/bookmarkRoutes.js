@@ -12,7 +12,10 @@ router
     .route('/:id')
     .get(controller.get)
     .patch(controller.update)
-    .delete(controller.delete)
-    ;
+    .delete(controller.delete);
+
+router
+    .route('/categories/:userCode')
+    .get(controller.getUserCategories);
 
 module.exports = router;
