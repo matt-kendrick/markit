@@ -125,6 +125,7 @@ exports.getUserCategories = async (req, res) => {
                 {
                     $group: {
                         _id: '$category',
+                        categorySlug: {$max: '$categorySlug'},
                         lastCreatedAt: {$max: '$createdAt'},
                         count: {$sum: 1}
                     }
@@ -134,6 +135,26 @@ exports.getUserCategories = async (req, res) => {
                 }
             ]
         );
+
+        res.status(200).json({
+            status: 'success',
+            bookmarks
+        });
+    }
+    catch(err){
+        res.status(400).json({
+            status: 'fail',
+            error: err
+        });
+    }
+}
+
+exports.getByUserCategory = async (req, res) => {
+
+    console.log(req.params.categorySlug);
+
+    try{
+        const bookmarks = await bookmarkModel.find({'userCode':req.params.userCode,'categorySlug':req.params.categorySlug}).sort({'title': 1});
 
         res.status(200).json({
             status: 'success',

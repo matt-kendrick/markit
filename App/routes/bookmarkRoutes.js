@@ -9,8 +9,12 @@ router
     .post(controller.create);
 
 router
-.route('/:userCode/categories/')
+.route('/:userCode/category/')
 .get(controller.getUserCategories);
+
+router
+.route('/:userCode/category/:categorySlug')
+.get(controller.getByUserCategory);
 
 router
     .route('/:userCode/:id')
