@@ -4,7 +4,8 @@
   "description": "API for MarkIt Bookmarking Site",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon servier.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "author": "Matt Kendrick",
   "license": "ISC",
