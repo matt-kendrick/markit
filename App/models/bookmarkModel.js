@@ -12,7 +12,13 @@ const bookmarkSchema = new mongoose.Schema(
     },
     'url':{
         type: String,
-        required: [true, 'Bookmarks must have a url.']
+        required: [true, 'Bookmarks must have a url.'],
+        validate: {
+            validator: function(val){
+                return val.match(/[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)
+            },
+            message: 'Invalid url.'
+        }
     },
     'category':{
         type: String,
