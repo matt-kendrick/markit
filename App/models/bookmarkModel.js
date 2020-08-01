@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const bookmarkSchema = new mongoose.Schema(
 {
@@ -24,10 +25,20 @@ const bookmarkSchema = new mongoose.Schema(
         type: String,
         default: 'Uncategorized'
     },
+    'categorySlug':{
+        type: String,
+        default: 'uncategorized'
+    },
     'createdAt':{
         type: Date,
         default: Date.now()
     }
+});
+
+//pre-save hook/middleware
+bookmarkSchema.pre("save", function(next){
+    this.categorySlug = slugify(this.category,{'lower':true});
+    next();
 });
 
 const Bookmark = mongoose.model('Bookmark',bookmarkSchema);
