@@ -21,7 +21,7 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
     
     try{
-        const bookmarks = await bookmarkModel.find();
+        const bookmarks = await bookmarkModel.find({userCode:req.params.userCode});
 
         res.status(200).json({
             status: 'success',
@@ -39,12 +39,20 @@ exports.getAll = async (req, res) => {
 exports.get = async (req, res) => {
     
     try{
-        const bookmark = await bookmarkModel.findById(req.params.id);
+        const bookmark = await bookmarkModel.findById(req.params.id).find({userCode:req.params.userCode});
 
-        res.status(200).json({
-            status: 'success',
-            bookmark
-        });
+        if(bookmark.length != 0){
+            res.status(200).json({
+                status: 'success',
+                bookmark
+            });
+        }
+        else{
+            res.status(400).json({
+                status: 'fail',
+                error: "Bookmark not found."
+            });
+        }
     }
     catch(err){
         res.status(400).json({
@@ -57,12 +65,20 @@ exports.get = async (req, res) => {
 exports.update = async (req, res) => {
 
     try{
-        const bookmark = await bookmarkModel.findByIdAndUpdate(req.params.id,req.body,{new: true,runValidators: true});
+        const bookmark = await bookmarkModel.findOneAndUpdate({'_id':req.params.id,'userCode':req.params.userCode},req.body,{new: true,runValidators: true});
 
-        res.status(200).json({
-            status: 'success',
-            bookmark
-        });
+        if(bookmark.length != 0){
+            res.status(200).json({
+                status: 'success',
+                bookmark
+            });
+        }
+        else{
+            res.status(400).json({
+                status: 'fail',
+                error: "Bookmark not found."
+            });
+        }
     }
     catch(err){
         res.status(400).json({
@@ -75,12 +91,20 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
 
     try{
-        const bookmark = await bookmarkModel.findByIdAndDelete(req.params.id);
+        const bookmark = await bookmarkModel.findOneAndDelete({'_id':req.params.id,'userCode':req.params.userCode});
 
-        res.status(200).json({
-            status: 'success',
-            bookmark: null
-        });
+        if(bookmark.length != 0){
+            res.status(200).json({
+                status: 'success',
+                bookmark: bookmark
+            });
+        }
+        else{
+            res.status(400).json({
+                status: 'fail',
+                error: "Bookmark not found."
+            });
+        }
     }
     catch(err){
         res.status(400).json({
@@ -100,10 +124,13 @@ exports.getUserCategories = async (req, res) => {
                 },
                 {
                     $group: {
-                        _id: "$category",
-                        lastCreatedAt: {$max: "$createdAt"},
+                        _id: '$category',
+                        lastCreatedAt: {$max: '$createdAt'},
                         count: {$sum: 1}
                     }
+                },
+                {
+                    $sort: {'_id':1}
                 }
             ]
         );

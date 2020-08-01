@@ -4,18 +4,18 @@ const controller = require('../controllers/bookmarkController');
 const router = express.Router();
 
 router 
-    .route('/')
+    .route('/:userCode/')
     .get(controller.getAll)
     .post(controller.create);
 
 router
-    .route('/:id')
+.route('/:userCode/categories/')
+.get(controller.getUserCategories);
+
+router
+    .route('/:userCode/:id')
     .get(controller.get)
     .patch(controller.update)
     .delete(controller.delete);
-
-router
-    .route('/categories/:userCode')
-    .get(controller.getUserCategories);
 
 module.exports = router;
