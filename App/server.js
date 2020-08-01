@@ -11,7 +11,7 @@ mongoose
   .then(() => console.log('DB connection successful!'));
 
 const app = express();
-const port = 80;
+const port = process.env.PORT || 80;
 
 //routers
 const bookmarkRouter = require('./routes/bookmarkRoutes');
