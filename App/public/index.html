@@ -1,16 +1,122 @@
 <html>
     <head>
-        <title>MarkIt - API Information</title>
+        <title>MarkIt</title>
+        <style>
+            body {font-family: Arial, Helvetica, sans-serif;}
+            ul {list-style-type: none;}
+            .category {border:solid 1px;padding:5px;margin:5px;width:200px;font-weight:bold;background-color:#abd5ea}
+            .category a {font-weight:100;}
+            .closed:before {content:'[+] ';}
+            .open:before {content:'[-] ';}
+        </style>
     </head>
     <body>
-        <h1>MarkIt - API Information</h1>
-        <p>
-            End Points
-            <ul>
-                <li>
-                    /api/bookmarks
-                </li>
-            </ul>
-        </p>
+        <h2>Bookmarks</h2>
+        <ul id='ulCategories'></ul>
+
+        <script type='text/javascript'>
+
+            const userCode = 'xxy';
+
+            //adds category to the category list
+            const addCategory = (parent,title,categorySlug) => {
+
+                //add new list item to category list, with a data-category attribute
+                var child = document.createElement("li");
+
+                //title text
+                child.appendChild(document.createTextNode(title));
+
+                child.classList.add('category');
+                child.classList.add('closed');
+                  
+                //data-category attribute
+                child.setAttribute('data-category',categorySlug);
+                
+                //fetch links as categories are expanded
+                child.addEventListener('click',function(){
+                    const categorySlug = this.attributes["data-category"].value;
+
+                    //if the list is open just close it otherwise populate it
+                    if(child.classList.contains('open')){
+                        child.getElementsByTagName('ul')[0].innerHTML = ''; //clear list should exit
+                        child.classList.remove('open');
+                        child.classList.add('closed');
+                    }
+                    else{
+                        let url = `http://localhost/api/bookmarks/${userCode}/category/${categorySlug}`;
+
+                        fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.status == 'success'){
+                                populateCategory(child,data.bookmarks);
+                                child.classList.remove('closed');
+                                child.classList.add('open');
+                            }
+                            else{
+                                console.log(`Error loading category: ${categorySlug}`);
+                            }
+                        });
+                    }
+
+                });
+
+                parent.appendChild(child);
+            };
+
+            //populates a sublist of bookmark link in category (runs when category is clicked)
+            const populateCategory = (parent,bookmarks) => {
+
+                //check to see if ul exists for this category, if not create it
+                var ul = parent.getElementsByTagName('ul')[0] || document.createElement("ul");
+
+                //make sure its empty
+                ul.innerHTML = "";
+
+                //set class attribute
+                ul.setAttribute('class','');
+
+                //add listener to keep it from responding to parent listener
+                ul.addEventListener('click', e => e.stopPropagation());
+
+                //create sub list of links under category list item
+                for(bookmark of bookmarks){
+
+                    //create link
+                    var link = document.createElement("a");
+                    var linkTextNode = document.createTextNode(bookmark.title);
+                    link.appendChild(linkTextNode);
+                    link.setAttribute('href',bookmark.url);
+                    link.setAttribute('target','_blank');
+
+                    //li
+                    var li = document.createElement("li");
+                    li.appendChild(link);
+
+                    li.classList.add('link');
+                    
+                    //add to ul
+                    ul.appendChild(li);
+                }
+
+                //add to parent
+                parent.appendChild(ul);
+            };
+
+            //populate categories
+            let url = `http://localhost/api/bookmarks/${userCode}/category`;
+
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const ulCategories = document.getElementById('ulCategories');
+
+                for(category of data.categories){
+                    addCategory(ulCategories,category._id,category.categorySlug);
+                }
+            });
+
+        </script>
     </body>
 </html>

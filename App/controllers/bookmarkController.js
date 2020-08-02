@@ -117,7 +117,7 @@ exports.delete = async (req, res) => {
 exports.getUserCategories = async (req, res) => {
     
     try{
-        const bookmarks = await bookmarkModel.aggregate(
+        const categories = await bookmarkModel.aggregate(
             [
                 {
                     $match: {userCode: req.params.userCode}
@@ -138,7 +138,7 @@ exports.getUserCategories = async (req, res) => {
 
         res.status(200).json({
             status: 'success',
-            bookmarks
+            categories
         });
     }
     catch(err){
